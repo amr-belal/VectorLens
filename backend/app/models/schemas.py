@@ -28,17 +28,15 @@ class Document(BaseModel):
     
     file_size : int = Field(..., gt=0,description="Size of the document in bytes")
     
-    metadata : DocumentMetadata = Field(default_factory=DocumentMetadata ,
-                                        description="Additional metadata about the document")
-    status : DocumentStatus = Field(default=DocumentStatus.PENDING,
-                                    description="Current processing status of the document")
+    metadata : DocumentMetadata = Field(default_factory=DocumentMetadata )
+    
+    status : DocumentStatus = Field(default=DocumentStatus.PENDING,)
     
     created_at : datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     
     file_name : str = Field(..., description="Original name of the uploaded file")
     
-    file_extension  : Optional[str] = Field(default="",
-                                            description="File extension extracted from the file name")
+    file_extension  : Optional[str] = Field(default="",description="extension of the file")
 
    
    
