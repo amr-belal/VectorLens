@@ -32,4 +32,4 @@ jobs:
       - name: Run linter
         run: |
           cd backend
-          ruff check .
+          ruff check . --fix

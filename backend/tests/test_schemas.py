@@ -1,5 +1,5 @@
 import pytest
-from app.models.schemas import Document, DocumentMetadata, DocumentStatus, ALLOWED_TYPES
+from app.models.schemas import Document, DocumentStatus
 
 
 def test_valid_document():

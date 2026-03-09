@@ -1,9 +1,10 @@
-from enum import Enum
-from pydantic import BaseModel, Field , field_validator, model_validator
-from typing import Optional
+import os
 from datetime import datetime, timezone
-from uuid import UUID , uuid4
-import os 
+from enum import Enum
+from typing import Optional
+from uuid import UUID, uuid4
+
+from pydantic import BaseModel, Field, field_validator, model_validator
 class DocumentStatus(str,Enum):
     PENDING = "pending"
     PROCESSING = "processing"
@@ -22,13 +23,22 @@ class Document(BaseModel):
     
     
     id : UUID = Field(default_factory=uuid4)
+    
     user_id : str = Field(..., description="ID of the user who uploaded the document")
+    
     file_size : int = Field(..., gt=0,description="Size of the document in bytes")
-    metadata : DocumentMetadata = Field(default_factory=DocumentMetadata , description="Additional metadata about the document")
-    status : DocumentStatus = Field(default=DocumentStatus.PENDING, description="Current processing status of the document")
+    
+    metadata : DocumentMetadata = Field(default_factory=DocumentMetadata ,
+                                        description="Additional metadata about the document")
+    status : DocumentStatus = Field(default=DocumentStatus.PENDING,
+                                    description="Current processing status of the document")
+    
     created_at : datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    
     file_name : str = Field(..., description="Original name of the uploaded file")
-    file_extension  : Optional[str] = Field(default="", description="File extension extracted from the file name")
+    
+    file_extension  : Optional[str] = Field(default="",
+                                            description="File extension extracted from the file name")
 
    
    
@@ -43,11 +53,11 @@ class Document(BaseModel):
             raise ValueError("File name must have an extension")
         
         elif os.path.splitext(value)[1].lower().strip(".") not in ALLOWED_TYPES:
-            raise ValueError(f"Unsupported file type in file name: {value}. Allowed types are: {', '.join(ALLOWED_TYPES)}")
+            allowed = ", ".join(ALLOWED_TYPES)
+            raise ValueError(
+            f"Unsupported file type: {value}. Allowed: {allowed}"
+            )
         
-        else:
-            extension = os.path.splitext(value)[1].lower()
-            file_name = os.path.splitext(value)[0]
             
         return value    
         
