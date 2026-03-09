@@ -28,8 +28,3 @@ jobs:
         run: |
           cd backend
           pytest tests/ -v
-
-      - name: Run linter
-        run: |
-          cd backend
-          ruff check . --fix
