@@ -2,6 +2,8 @@ import os
 import uuid
 from fastapi import UploadFile
 from app.models.schemas import ALLOWED_TYPES
+from sqlalchemy.orm import Session
+from app.models.document import Document
 
 BASE_DIR =  os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR =  os.path.dirname(os.path.dirname(os.path.dirname(BASE_DIR)))
@@ -29,9 +31,10 @@ class DocumentService:
     
         with open(save_path, "wb") as f:
             content = await file.read()
+            file_size = len(content)
             f.write(content)
             
-        return save_path
+        return save_path , file_size
 
 
 
@@ -40,6 +43,13 @@ class DocumentService:
         if extension not in ALLOWED_TYPES:
             return False
         return True
+    
+
+    def save_metadata(self,db:Session , document:Document):
+        db.add(document)
+        db.commit()
+        db.refresh(document)
+        return document
 
 
 if "__main__" == __name__:
