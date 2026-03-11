@@ -4,10 +4,12 @@ from fastapi import UploadFile
 from app.models.schemas import ALLOWED_TYPES
 from sqlalchemy.orm import Session
 from app.models.document import Document
+from app.models.chunk import ChunkTable
 
 BASE_DIR =  os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR =  os.path.dirname(os.path.dirname(os.path.dirname(BASE_DIR)))
 UPLOAD_DIR = os.path.join(ROOT_DIR, "data", "documents")
+
 
 
 class DocumentService:
@@ -52,8 +54,25 @@ class DocumentService:
         return document
 
 
+
+    def save_chunks(self, db:Session ,file_id:str ,chunks:list[str]):
+        
+        for index, chunk in enumerate(chunks):
+            chunk = ChunkTable(
+                file_id=file_id,
+                content=chunk,
+                chunk_size=len(chunk),
+                chunk_index=index
+            )
+            db.add(chunk)
+        db.commit()
+        
+    
+
+
 if "__main__" == __name__:
     service = DocumentService()
     unique_name = service.make_uniqe_filename("example.pdf")
     print(unique_name)
     print(UPLOAD_DIR)
+    
