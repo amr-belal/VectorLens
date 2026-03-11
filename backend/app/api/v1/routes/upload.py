@@ -3,12 +3,14 @@ from app.services.document_service import DocumentService
 from app.core.database import  get_db
 from sqlalchemy.orm import Session
 from app.models.document import Document
-
-
+from app.services.text_extractor import TextExtractor
+from app.services.chunker import Chunker
 
 
 router= APIRouter()
 document_services = DocumentService()
+text_extractor = TextExtractor()
+chunker = Chunker()
 
 
 @router.post("/documents")
@@ -35,4 +37,15 @@ async def upload_document(
         status="uploaded"
     )
     document_services.save_metadata(db, document)
-    return {"filename": unique_filename}
+
+    # Extract text from the file and return it
+    extracted_text = text_extractor.extract_from_pdf(save_path)
+    
+    # Chunk the text and return it
+    chunks = chunker.chunk_text(extracted_text)
+    
+    # Save the chunk to the database
+    document_services.save_chunks(db, unique_filename, chunks)
+    
+    return {"filename": unique_filename,
+            "extracted_text": extracted_text[:500]}  # Return a preview of the extracted text
