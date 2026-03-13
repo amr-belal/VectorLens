@@ -27,13 +27,54 @@
 - Absolute path for file storage
 
 
-## Sprint 3 :
+## Sprint 3: Text Extraction & Chunking
+- TextExtractor service (pymupdf/fitz)
+- Mixed content handling (text + images per page)
+- Chunker service (langchain RecursiveCharacterTextSplitter)
+- chunk_size=1000, overlap=200
+- Chunk table (chunk_id, file_id, content, chunk_size, chunk_index)
+- save_chunks in DocumentService
+- Full pipeline: upload → extract → chunk → save to DB
 
-- Upload flow : 
-1. validate
-2. save file
-3. extract text
-4. chunk text
-5. save chunks في DB  
-6. save document metadata
-7. return response
+> Flow
+```
+User upload PDF
+      ↓
+validate extension
+      ↓
+save file locally
+      ↓
+extract text (pymupdf)
+      ↓
+chunk text (langchain)
+      ↓
+save chunks in DB
+      ↓
+save document metadata
+      ↓
+return response ✅
+
+```
+
+## Sprint 4: Embedding Pipeline & Async Processing
+
+### Embedding
+- Factory Pattern for embedding models (BaseEmbedder, BGEEmbedder, OllamaEmbedder)
+- Ollama integration for local embedding (bge-m3, 1024 dimensions)
+- Model loaded once at startup via lifespan (Load Once pattern)
+
+### Vector Databases
+- Factory Pattern for vector stores (BaseVectorStore, QdrantStore, ChromaStore)
+- Qdrant integration (Docker, port 6333)
+- Chroma integration (Docker, port 8080)
+- Upsert chunks to both DBs on every upload
+
+### Search Endpoint
+- POST /api/v1/search
+- Embed query → search in selected DB → return ranked results with scores
+
+### Async Processing (Background Tasks)
+- Upload endpoint returns response immediately
+- Processing pipeline runs in background:
+  extract → chunk → embed → upsert to Qdrant & Chroma
+- Response time: 181s → 0.03s (6000x improvement)

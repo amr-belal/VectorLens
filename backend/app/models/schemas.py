@@ -65,7 +65,15 @@ class Document(BaseModel):
         return self
     
 
-
+class SearchVector(BaseModel):
+    query: str = Field(..., description="The search query")
+    db:str= "qdrant"
+    limit: int = Field(5, gt=0, description="Number of top results to return")
+    collection:str 
+    
+    
+    
+    
 if __name__ == "__main__":
     doc = Document(
         user_id="user123",
