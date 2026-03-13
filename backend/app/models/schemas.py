@@ -71,9 +71,25 @@ class SearchVector(BaseModel):
     limit: int = Field(5, gt=0, description="Number of top results to return")
     collection:str 
     
+
+class BenchmarkRequest(BaseModel):
     
+    dbs:list[str] = ["qdrant","chroma"]
+    collection_id : str
+    queries : list[str]
     
-    
+        
+
+
+
+
+
+
+
+
+
+
+
 if __name__ == "__main__":
     doc = Document(
         user_id="user123",
