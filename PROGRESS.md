@@ -258,3 +258,12 @@ Bao is a learned system for query optimization that is capable of learning how t
 - ✅ upsert في Qdrant
 - ✅ upsert في Chroma
 - ✅ task succeeded
+
+
+## Sprint 10: MinIO Object Storage
+- MinIO (Docker, port 9000/9001)
+- MinIoService (upload, download, delete, get_url)
+- Replaced local file storage with MinIO
+- Files stored with unique names in vectorlens bucket
+- Password from .env
+
