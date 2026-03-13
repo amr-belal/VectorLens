@@ -88,3 +88,9 @@ return response ✅
 - Summary: avg latency, fastest, slowest
 - Registered benchmark router in main.py
 
+## Sprint 6: LLM Analysis
+- BaseLLM abstract class
+- OllamaLLM (llama3.2)
+- PromptsLLM template (benchmark_analysis)
+- POST /api/v1/benchmark/analyze
+- LLM analyzes benchmark results and recommends best DB
