@@ -4,7 +4,11 @@ from app.services.Vectordb.qdrant_store import QdrantStore
 from app.services.Vectordb.chroma_store import ChromaStore
 from app.services.embedding.factory import EmbeddingFactory
 from app.services.Vectordb.factory import VectorDBFactory
+from app.core.cache import CacheService
 
+
+
+cache  = CacheService()
 router = APIRouter()
 # vectordb = VectorDBFactory()
 embedder = EmbeddingFactory.create("ollama")
@@ -18,6 +22,16 @@ async def search_vector(request:SearchVector):
 #     limit: int = Field(5, gt=0, description="Number of top results to return")
 #     collection:str 
 
+    # chech cache 
+    cache_key = f"{request.collection}:{request.query}:{request.db}"
+    cached = cache.get(cache_key)
+    
+    if cached:
+        return {
+            "results": cached,
+            "from_cahce": True
+        }
+
     vectordb = VectorDBFactory.create(request.db)
     query_vector = embedder.embed([request.query])[0]
     results = vectordb.search(
@@ -26,4 +40,9 @@ async def search_vector(request:SearchVector):
         limit=request.limit
     )
     
-    return {"results": results}
+    cache.set(cache_key, results)
+        
+    return {
+        "results": results,
+        "from_cahce": False
+    }
