@@ -6,7 +6,7 @@ from contextlib import asynccontextmanager
 from app.api.v1.routes.search import router as search_router
 from app.services.embedding.factory import EmbeddingFactory
 from app.api.v1.routes.benchmark import router as benchmark_router
-
+from app.api.v1.routes.analyze import router as analyze_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -20,4 +20,4 @@ app = FastAPI(lifespan=lifespan)
 app.include_router(upload_router , prefix="/api/v1")
 app.include_router(search_router , prefix="/api/v1")
 app.include_router(benchmark_router , prefix="/api/v1")
-
+app.include_router(analyze_router , prefix="/api/v1")

@@ -81,6 +81,10 @@ class BenchmarkRequest(BaseModel):
         
 
 
+class AnalyzeRequest(BaseModel):
+    
+    summary  :dict
+    use_case :str
 
 
 
