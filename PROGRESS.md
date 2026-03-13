@@ -78,3 +78,13 @@ return response ✅
 - Processing pipeline runs in background:
   extract → chunk → embed → upsert to Qdrant & Chroma
 - Response time: 181s → 0.03s (6000x improvement)
+
+
+## Sprint 5: Benchmark Engine
+- BenchmarkRequest schema (dbs, collection_id, queries)
+- POST /api/v1/benchmark endpoint
+- Runs same queries on multiple Vector DBs (Qdrant & Chroma)
+- Measures latency per query per DB
+- Summary: avg latency, fastest, slowest
+- Registered benchmark router in main.py
+
