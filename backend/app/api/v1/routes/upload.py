@@ -7,6 +7,7 @@ from app.services.text_extractor import TextExtractor
 from app.services.chunker import Chunker
 from app.services.Vectordb.factory import VectorDBFactory
 from app.services.embedding.factory import EmbeddingFactory
+from app.tasks.document_tasks import process_document_task
 from app.core.database import SessionLocal
 from uuid import uuid4
 import time
@@ -98,8 +99,9 @@ async def upload_document(file: UploadFile, request: Request,
     
     embedder = request.app.state.embedder
      
-    background_tasks.add_task(process_document, save_path, unique_filename, embedder)
+    # background_tasks.add_task(process_document, save_path, unique_filename, embedder)
 
+    process_document_task.delay(save_path, unique_filename)
     
     # return {"filename": unique_filename,
     #         "extracted_text": extracted_text[:500]}  # Return a preview of the extracted text

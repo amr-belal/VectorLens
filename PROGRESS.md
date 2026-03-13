@@ -207,3 +207,63 @@ Bao is a learned system for query optimization that is capable of learning how t
     "from_cahce": true
 }
 ```
+
+
+## Sprint 9: Celery + Redis Queue
+- Celery worker with Redis broker
+- process_document_task (embed + upsert)
+- Upload endpoint uses Celery instead of BackgroundTasks
+- Tasks persist even if server restarts
+- Job tracking via task ID
+
+
+
+>Celery worker 
+```
+ 
+ -------------- celery@DESKTOP-A4BMTV9 v5.6.2 (recovery)
+--- ***** ----- 
+-- ******* ---- Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.39 2026-03-13 17:43:55
+- *** --- * --- 
+- ** ---------- [config]
+- ** ---------- .> app:         vectorlens:0x7644c08df9e0
+- ** ---------- .> transport:   redis://localhost:6379/0
+- ** ---------- .> results:     redis://localhost:6379/0
+- *** --- * --- .> concurrency: 8 (prefork)
+-- ******* ---- .> task events: OFF (enable -E to monitor tasks in this worker)
+--- ***** ----- 
+ -------------- [queues]
+                .> celery           exchange=celery(direct) key=celery
+
+
+
+
+
+
+[tasks]
+  . app.tasks.document_tasks.process_document_task
+
+[2026-03-13 17:44:00,345: INFO/MainProcess] Connected to redis://localhost:6379/0
+[2026-03-13 17:44:00,355: INFO/MainProcess] mingle: searching for neighbors
+[2026-03-13 17:44:01,379: INFO/MainProcess] mingle: all alone
+[2026-03-13 17:44:01,443: INFO/MainProcess] celery@DESKTOP-A4BMTV9 ready.
+[2026-03-13 17:45:16,368: INFO/MainProcess] Task app.tasks.document_tasks.process_document_task[409fb448-1abf-4792-858d-dec1d9a96844] received
+[2026-03-13 17:45:24,312: INFO/MainProcess] Task app.tasks.document_tasks.process_document_task[4a01a6ca-88f8-4202-8d5a-05a1d392e403] received
+[2026-03-13 17:45:34,410: INFO/MainProcess] Task app.tasks.document_tasks.process_document_task[a0bb8d42-bc69-4c16-81f9-b204cbd49e95] received
+
+```
+
+> celery flow 
+- ✅ embed (ollama)
+- ✅ upsert في Qdrant
+- ✅ upsert في Chroma
+- ✅ task succeeded
+
+
+## Sprint 10: MinIO Object Storage
+- MinIO (Docker, port 9000/9001)
+- MinIoService (upload, download, delete, get_url)
+- Replaced local file storage with MinIO
+- Files stored with unique names in vectorlens bucket
+- Password from .env
+

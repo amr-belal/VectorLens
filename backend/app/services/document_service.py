@@ -5,6 +5,10 @@ from app.models.schemas import ALLOWED_TYPES
 from sqlalchemy.orm import Session
 from app.models.document import Document
 from app.models.chunk import ChunkTable
+from app.services.storage.minio_service import MinIoService
+
+minio = MinIoService()
+
 
 BASE_DIR =  os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR =  os.path.dirname(os.path.dirname(os.path.dirname(BASE_DIR)))
@@ -27,14 +31,24 @@ class DocumentService:
         return unique_filename
     
     async def save_file(self, file:UploadFile , unique_name:str)->str:
-        os.makedirs(UPLOAD_DIR, exist_ok=True)
-        save_path = os.path.join(UPLOAD_DIR, unique_name)
-
-    
-        with open(save_path, "wb") as f:
-            content = await file.read()
+        
+        temp = f"/tmp/{unique_name}"
+        content = await file.read()
+        
+        with open(temp, "wb") as f:
             file_size = len(content)
             f.write(content)
+            
+        save_path = minio.upload_file(unique_name, temp)
+        
+        # os.makedirs(UPLOAD_DIR, exist_ok=True)
+        # save_path = os.path.join(UPLOAD_DIR, unique_name)
+
+    
+        # with open(save_path, "wb") as f:
+        #     content = await file.read()
+        #     file_size = len(content)
+        #     f.write(content)
             
         return save_path , file_size
 
