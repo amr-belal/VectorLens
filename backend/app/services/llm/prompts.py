@@ -21,4 +21,17 @@ class PromptsLLM:
 
                     Keep your response concise and practical.
                 """
-                            
+    @staticmethod
+    def chat_llm (question:str , context:list[str])->str:
+        context_text ="\n\n".join(context)
+        return f"""
+                    You are a helpful assistant. Answer the question based ONLY on the provided context.
+                    If the answer is not in the context, say "I don't have enough information to answer this."
+
+                    Context:
+                    {context_text}
+
+                    Question: {question}
+
+                    Answer:
+                """

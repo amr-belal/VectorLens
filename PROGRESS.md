@@ -94,3 +94,10 @@ return response ✅
 - PromptsLLM template (benchmark_analysis)
 - POST /api/v1/benchmark/analyze
 - LLM analyzes benchmark results and recommends best DB
+
+## Sprint 7: RAG Chat
+- ChatRequest schema (message, collection, db)
+- POST /api/v1/chat endpoint
+- RAG pipeline: embed → search → context → LLM
+- Streaming response (token by token)
+- rag_chat prompt template
