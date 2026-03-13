@@ -90,7 +90,11 @@ class AnalyzeRequest(BaseModel):
 
 
 
-
+class ChatRequest(BaseModel):
+    
+    message :str
+    collection :str
+    db :str
 
 
 
