@@ -8,6 +8,7 @@ from app.services.embedding.factory import EmbeddingFactory
 from app.api.v1.routes.benchmark import router as benchmark_router
 from app.api.v1.routes.analyze import router as analyze_router
 from app.api.v1.routes.chat import router as chat_router
+from app.api.v1.routes.batch import router as batch_router
 @asynccontextmanager
 async def lifespan(app: FastAPI):
 
@@ -34,3 +35,4 @@ app.include_router(search_router , prefix="/api/v1")
 app.include_router(benchmark_router , prefix="/api/v1")
 app.include_router(analyze_router , prefix="/api/v1")
 app.include_router(chat_router , prefix="/api/v1")
+app.include_router(batch_router , prefix="/api/v1")

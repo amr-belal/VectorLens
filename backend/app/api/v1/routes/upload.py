@@ -107,7 +107,18 @@ async def upload_document(file: UploadFile, request: Request,
     #         "extracted_text": extracted_text[:500]}  # Return a preview of the extracted text
     end = time.time()
     
-    
+    task = process_document_task.delay(save_path, unique_filename)
+
     print(f"Response time: {end - start:.2f}s")
     
-    return {"filename": unique_filename, "status": "processing"}
+    return {"filename": unique_filename,
+            "status": "processing",
+            "task_id": task.id}
+    
+
+
+@router.get("/jobs/{job_id}")
+async def get_job_status(job_id: str):
+    from app.core.celery_app import celery_app
+    task = celery_app.AsyncResult(job_id)
+    return {"job_id": job_id, "status": task.status}
