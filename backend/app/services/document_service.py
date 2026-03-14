@@ -22,12 +22,12 @@ class DocumentService:
     
     def make_uniqe_filename(self , filename:str)->str:
         filename, ext = os.path.splitext(filename)
-        
+        filename = filename.replace(" ", "_")
         extension = ext.lower().strip(".")
               
         
         unique_id = uuid.uuid4().hex[:8]
-        unique_filename = f"{filename}_{unique_id}.{extension}"
+        unique_filename = f"{filename}_{unique_id}"
         return unique_filename
     
     async def save_file(self, file:UploadFile , unique_name:str)->str:
@@ -50,7 +50,7 @@ class DocumentService:
         #     file_size = len(content)
         #     f.write(content)
             
-        return save_path , file_size
+        return temp  , file_size
 
 
 
