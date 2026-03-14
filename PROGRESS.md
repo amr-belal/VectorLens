@@ -267,3 +267,33 @@ Bao is a learned system for query optimization that is capable of learning how t
 - Files stored with unique names in vectorlens bucket
 - Password from .env
 
+
+
+## Sprint 11: Bug Fixes & Job Status
+- Fixed collection naming (spaces → underscores, removed extension)
+- Added job_id in upload response
+- GET /api/v1/jobs/{job_id} endpoint
+- Fixed duplicate Celery task call
+- MinIO temp path fix for text extraction
+
+
+## Sprint 12: Kafka Batch Processing
+- Kafka + Zookeeper (Docker)
+- DocumentProducer (sends to "documents" topic)
+- DocumentConsumer (group_id: vectorlens-workers)
+- Kafka Worker (consumer → Celery task)
+- POST /api/v1/documents/batch (multiple files)
+- Files processed asynchronously via Kafka → Celery
+
+
+>kafka output 
+```
+Received: {'save_path': '/tmp/VantageNet__Real-Time_Emotion_Detection_System_6d6cff9e', 'unique_filename': 'VantageNet__Real-Time_Emotion_Detection_System_6d6cff9e'}
+Processing: VantageNet__Real-Time_Emotion_Detection_System_6d6cff9e
+Received: {'save_path': '/tmp/Amr_Elsayed_Belal_AI_Resume_FINAL_(1)_28bc1beb', 'unique_filename': 'Amr_Elsayed_Belal_AI_Resume_FINAL_(1)_28bc1beb'}
+Processing: Amr_Elsayed_Belal_AI_Resume_FINAL_(1)_28bc1beb
+Received: {'save_path': '/tmp/Amr_Elsayed_Belal_RL_AI_f26e6802', 'unique_filename': 'Amr_Elsayed_Belal_RL_AI_f26e6802'}
+Processing: Amr_Elsayed_Belal_RL_AI_f26e6802
+
+```
+
