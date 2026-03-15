@@ -32,7 +32,8 @@ class DocumentService:
     
     async def save_file(self, file:UploadFile , unique_name:str)->str:
         
-        temp = f"/tmp/{unique_name}"
+        # temp = f"/tmp/{unique_name}"
+        temp = f"{UPLOAD_DIR}/{unique_name}"
         content = await file.read()
         
         with open(temp, "wb") as f:

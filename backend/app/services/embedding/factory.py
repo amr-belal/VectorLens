@@ -1,7 +1,7 @@
 from .base import BaseEmbedder
 from .bge_embedder import BGEEmbedder
 from .ollama_embedder import OllamaEmbedder
-
+from .mini_lm_embedder import MiniLMEmbedder
 
 class EmbeddingFactory:
     
@@ -13,6 +13,9 @@ class EmbeddingFactory:
         
         elif model_name == "ollama":
             return OllamaEmbedder()
+        
+        elif model_name == "mini_lm":
+            return MiniLMEmbedder()
         
         else:
             raise ValueError(f"Unknown model name: {model_name}")
