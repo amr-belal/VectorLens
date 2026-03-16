@@ -9,6 +9,14 @@ from app.api.v1.routes.benchmark import router as benchmark_router
 from app.api.v1.routes.analyze import router as analyze_router
 from app.api.v1.routes.chat import router as chat_router
 from app.api.v1.routes.batch import router as batch_router
+from app.core.logging import setup_logging , get_logger
+from fastapi.middleware.cors import CORSMiddleware
+
+
+
+setup_logging()
+logger = get_logger(__name__)
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
 
@@ -22,14 +30,29 @@ async def lifespan(app: FastAPI):
     When exiting the context, it does nothing.
 
     """
+    version = "0.0.1"
 
     from app.core.database import create_tables
+    logger.info(f"starting app version {version} - vectorlens")
     create_tables()
     app.state.embedder = EmbeddingFactory.create("ollama")
+    logger.info(f"started successfully app version {version} - vectorlens")
     yield
+
+    logger.info(f"shutting down app version {version} - vectorlens")
 
 
 app = FastAPI(lifespan=lifespan)
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000", "http://localhost:3001"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
 app.include_router(upload_router , prefix="/api/v1")
 app.include_router(search_router , prefix="/api/v1")
 app.include_router(benchmark_router , prefix="/api/v1")

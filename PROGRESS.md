@@ -173,10 +173,10 @@ curl -X POST http://127.0.0.1:8000/api/v1/chat \
 Bao is a learned system for query optimization that is capable of learning how to apply query hints on a case-by-case basis. It combines modern tree convolutional neural networks with Thompson sampling, a well-studied reinforcement learning algorithm.(.venv) amrbelal@DE
 ```
 ---
->✅ PostgreSQL  → 5435
->✅ Redis       → 6379
->✅ Qdrant      → 6333
->✅ Chroma      → 8080
+- ✅ PostgreSQL  → 5435
+- ✅ Redis       → 6379
+- ✅ Qdrant      → 6333
+- ✅ Chroma      → 8080
 
 ---
 
@@ -297,3 +297,12 @@ Processing: Amr_Elsayed_Belal_RL_AI_f26e6802
 
 ```
 
+
+
+## Sprint 14: Frontend
+- React + TypeScript + Tailwind
+- Upload page (single & batch)
+- Search page (with cache indicator)
+- Benchmark page (with AI analysis)
+- Chat page (streaming RAG)
+- CORS middleware in FastAPI

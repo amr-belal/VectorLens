@@ -5,9 +5,9 @@ from .base import BaseVectorStore
 
 class QdrantStore(BaseVectorStore):
     
-    def __init__ (self ):
+    def __init__ (self , vector_size = 384):
         self.client =  QdrantClient(url="http://localhost:6333")
-        
+        self.vector_size = vector_size
     
     def upsert(self, collection:str , ids:list[str],
                vectors:list[list[float]],
@@ -16,7 +16,7 @@ class QdrantStore(BaseVectorStore):
         if not self.client.collection_exists(collection_name=collection):    
             self.client.create_collection(
                 collection_name=collection,
-                vectors_config=VectorParams(size=1024, distance=Distance.COSINE),
+                vectors_config=VectorParams(size=self.vector_size, distance=Distance.COSINE),
             )
         
         self.client.upsert(
