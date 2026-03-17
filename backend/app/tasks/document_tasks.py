@@ -26,10 +26,13 @@ def process_document_task(save_path:str , unique_filename:str):
         for db_name in ['qdrant', 'chroma']:
             store = VectorDBFactory.create(db_name)
             store.upsert(
-                collection=unique_filename,
+                collection=f"vectorlens_{db_name}",
                 ids=[str(uuid4()) for _ in range(len(chunks))],
                 vectors=vectors,
-                payloads=[{"text": chunk} for chunk in chunks]
+                payloads=[{"text": chunk,
+                           "file_id": unique_filename
+                           
+                           } for chunk in chunks]
             )
     finally:
         db.close()

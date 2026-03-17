@@ -27,7 +27,8 @@ async def benchmark(request:BenchmarkRequest):
             
             start = time.time()
             search_results = store.search(
-                collection=collection_id,
+                collection = f"vectorlens_{db_name}",
+                # collection=collection,
                 query_vector=query_vector,
                 limit=5
             )
