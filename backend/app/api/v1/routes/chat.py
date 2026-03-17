@@ -23,7 +23,8 @@ async def root(request:ChatRequest):
     store =VectorDBFactory.create(request.db)
     
     results  = store.search(
-        collection=request.collection,
+        # collection=request.collection,
+        collection=f"vectorlens_{request.db}",
         query_vector=query_vector,
         limit=5
     )

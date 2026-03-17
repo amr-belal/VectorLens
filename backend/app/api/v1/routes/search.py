@@ -23,6 +23,7 @@ async def search_vector(request:SearchVector):
 #     collection:str 
 
     # chech cache 
+    collection=f"vectorlens_{request.db}"
     cache_key = f"{request.collection}:{request.query}:{request.db}"
     cached = cache.get(cache_key)
     
@@ -35,7 +36,8 @@ async def search_vector(request:SearchVector):
     vectordb = VectorDBFactory.create(request.db)
     query_vector = embedder.embed([request.query])[0]
     results = vectordb.search(
-        collection=request.collection,
+        collection=f"vectorlens_{request.db}",
+        # collection=request.collection,
         query_vector=query_vector,
         limit=request.limit
     )

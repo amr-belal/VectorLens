@@ -4,7 +4,7 @@ from .base import BaseEmbedder
 
 class OllamaEmbedder(BaseEmbedder):
     
-    def __init__(self , model:str = "all-minilm"): # bge-m3 ,another model available
+    def __init__(self , model:str = "bge-m3"): # bge-m3 , mini_lm ,another model available
         self.model = model
         
         
